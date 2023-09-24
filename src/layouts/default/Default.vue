@@ -1,12 +1,13 @@
 <template>
-  <v-app>
-    <default-bar />
+  <v-app dark>
+    <!-- <CoreDrawer /> -->
 
-    <default-view />
+    <v-main class="overflow-hidden">
+      <router-view />
+    </v-main>
   </v-app>
 </template>
 
 <script setup>
-  import DefaultBar from './AppBar.vue'
-  import DefaultView from './View.vue'
+// import CoreDrawer from '@/components/home/core/Drawer.vue'
 </script>
