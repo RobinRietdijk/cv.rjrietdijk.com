@@ -8,7 +8,7 @@
             </CoreSubheading>
 
             <CoreText class="mb-5">
-                {{ schema.basics.contact }}
+                Test1231231231
             </CoreText>
 
             <CoreSubheading class="text-uppercase mb-3">

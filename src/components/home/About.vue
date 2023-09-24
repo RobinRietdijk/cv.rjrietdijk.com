@@ -7,7 +7,8 @@
             <v-row justify="space-between">
                 <v-col cols="12" md="7">
                     <CoreText class="mb-0">
-                        <p>TEST</p>
+                        <p>I am a {{ age }} year old student at the Delft University of Technology.
+                            I am currently working towards my bachelor's in Computer Science and Engineering.</p>
                         <div>
                             <v-img src="@/assets/signature.png" class="ml-auto" width="150" />
                         </div>
@@ -23,10 +24,10 @@
                             <div v-text="'Discord'" />
                         </v-col>
                         <v-col cols="6" class="subheading text-no-wrap">
-                            <div class="mb-3">Test</div>
-                            <div class="mb-3">TEST</div>
-                            <div class="mb-3">Test</div>
-                            <div>TEST</div>
+                            <div class="mb-3">Netherlands</div>
+                            <div class="mb-3">robin@rjrietdijk.com</div>
+                            <div class="mb-3">+31 (0) 6 1429 6237</div>
+                            <div>rj.rietdijk#2016</div>
                         </v-col>
                     </v-row>
                 </v-col>
@@ -34,9 +35,9 @@
         </v-col>
 
         <v-col class="hidden-sm-and-down text-right text-uppercase" cols="5">
-            <div class="display-1">TEST</div>
+            <div class="display-1">Student Computer Science and Engineering at TU Delft</div>
 
-            <span class="primary--text headline font-weight-light">TEST</span>
+            <span class="primary--text headline font-weight-light">Robin Rietdijk</span>
         </v-col>
     </CoreSection>
 </template>
@@ -52,6 +53,9 @@ export default {
         CoreSection,
         CoreText,
     },
+    data: () => ({
+        age: 24
+    }),
 }
 </script>
 

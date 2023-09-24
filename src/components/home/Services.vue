@@ -5,11 +5,11 @@
         <v-col cols="12" md="6">
             <v-expansion-panels v-model="expansion" popout>
                 <v-expansion-panel v-for="(item, i) in items" :key="i">
-                    <v-expansion-panel-header class="title font-weight-light">
+                    <v-expansion-panel-title class="title font-weight-light">
                         <div v-text="item.name" />
-                    </v-expansion-panel-header>
+                    </v-expansion-panel-title>
 
-                    <v-expansion-panel-content :class="expansion !== i ? 'transparent' : ''">
+                    <v-expansion-panel-text :class="expansion !== i ? 'transparent' : ''">
                         <div>
                             <v-card color="transparent" flat>
                                 <v-card-text>
@@ -17,7 +17,7 @@
                                 </v-card-text>
                             </v-card>
                         </div>
-                    </v-expansion-panel-content>
+                    </v-expansion-panel-text>
                 </v-expansion-panel>
             </v-expansion-panels>
         </v-col>
