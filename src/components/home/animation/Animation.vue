@@ -3,18 +3,19 @@
         <canvas id="anim" ref="anim" />
     </div>
 </template>
-  
+
 <script>
 import { Particle } from '@/components/home/animation/Particle.js'
 import { Flare } from '@/components/home/animation/Flare.js'
 import { Link } from '@/components/home/animation/Link.js'
 import { noisePoint, position, random } from '@/components/home/animation/utils.js'
 import Delaunay from "delaunay-fast";
+
 export default {
     data: () => ({
         particleCount: 40,
         flareCount: 15,
-        color: '#FFEED4',
+        color: '#ffffff',
         c: 1000,
         blurSize: 0,
         mouse: { x: 0, y: 0 },
@@ -52,8 +53,11 @@ export default {
     mounted() {
         this.provider.context = this.$refs["anim"].getContext("2d")
         this.provider.canvas = this.$refs["anim"]
-
         this.init()
+    },
+
+    beforeUnmount() {
+        this._destroyed = true
     },
 
     methods: {
@@ -63,9 +67,7 @@ export default {
                     window.requestAnimationFrame ||
                     window.webkitRequestAnimationFrame ||
                     window.mozRequestAnimationFrame ||
-                    function (callback) {
-                        window.setTimeout(callback, 1000 / 60)
-                    }
+                    function (callback) { window.setTimeout(callback, 1000 / 60) }
                 )
             })()
 
@@ -79,6 +81,7 @@ export default {
                 this.particles.push(p)
                 this.points.push([p.x * this.c, p.y * this.c])
             }
+
             this.vertices = Delaunay.triangulate(this.points)
             var tri = []
             for (var i = 0; i < this.vertices.length; i++) {
@@ -93,7 +96,7 @@ export default {
                 for (var j = 0; j < this.triangles.length; j++) {
                     var k = this.triangles[j].indexOf(i)
                     if (k !== -1) {
-                        this.triangles[j].forEach((value, index, array) => {
+                        this.triangles[j].forEach((value) => {
                             if (value !== i && this.particles[i].neighbors.indexOf(value) == -1) {
                                 this.particles[i].neighbors.push(value)
                             }
@@ -111,17 +114,17 @@ export default {
                     this.mouse.x = (this.provider.canvas.clientWidth / 2) - ((e.gamma / 90) * (this.provider.canvas.clientWidth / 2) * 2)
                     this.mouse.y = (this.provider.canvas.clientHeight / 2) - ((e.beta / 90) * (this.provider.canvas.clientHeight / 2) * 2)
                 }, true)
-            }
-            else {
+            } else {
                 document.body.addEventListener('mousemove', (e) => {
                     this.mouse.x = e.clientX
                     this.mouse.y = e.clientY
                 })
             }
 
-            var animloop = () => {
+            const animloop = () => {
+                if (this._destroyed) return
                 requestAnimFrame(animloop)
-                this.resize()
+                this.resize()   // guarded — only resets canvas when size actually changed
                 this.render()
             }
             animloop()
@@ -132,10 +135,8 @@ export default {
             var context = this.provider.context
 
             this.n++
-            if (this.n >= this.noiseLength) {
-                this.n = 0
-            }
-            this.nPos = noisePoint(this.n, this.nAngle, this.nRad);
+            if (this.n >= this.noiseLength) this.n = 0
+            this.nPos = noisePoint(this.n, this.nAngle, this.nRad)
 
             context.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -148,38 +149,18 @@ export default {
                 this.particles[i].render(canvas, this.noiseStrength, this.nPos, this.mouse, this.motion)
             }
 
-            if (this.debug) {
-                context.beginPath();
-                for (var v = 0; v < this.vertices.length - 1; v++) {
-                    if ((v + 1) % 3 === 0) { continue }
-
-                    var p1 = this.particles[this.vertices[v]],
-                        p2 = this.particles[this.vertices[v + 1]]
-
-                    var pos1 = position(p1.x, p1.y, p1.z, canvas, this.noiseStrength, this.nPos, this.mouse, this.motion),
-                        pos2 = position(p2.x, p2.y, p2.z, canvas, this.noiseStrength, this.nPos, this.mouse, this.motion)
-
-                    context.moveTo(pos1.x, pos1.y)
-                    context.lineTo(pos2.x, pos2.y)
-                }
-                context.strokeStyle = this.color
-                context.lineWidth = this.lineWidth
-                context.stroke()
-                context.closePath()
-            }
-
             if (random(0, this.linkChance) === this.linkChance) {
                 var length = random(this.linkLengthMin, this.linkLengthMax)
                 var start = random(0, this.particles.length - 1)
                 this.startLink(start, length)
             }
 
+            // splice (not delete) so the array never accumulates undefined slots
             for (var l = this.links.length - 1; l >= 0; l--) {
                 if (this.links[l] && !this.links[l].finished) {
                     this.links[l].render(canvas, this.particles, this.noiseStrength, this.nPos, this.mouse, this.motion)
-                }
-                else {
-                    delete this.links[l]
+                } else {
+                    this.links.splice(l, 1)
                 }
             }
 
@@ -188,9 +169,15 @@ export default {
             }
         },
 
+        // Guarded: only resets canvas bitmap when dimensions actually change.
+        // Setting canvas.width/height resets the whole bitmap even for the same value —
+        // calling it every frame at 60 fps was the main source of lag.
         resize() {
-            this.provider.canvas.width = window.innerWidth * (window.devicePixelRatio || 1)
-            this.provider.canvas.height = this.provider.canvas.width * (this.provider.canvas.clientHeight / this.provider.canvas.clientWidth)
+            const dpr = window.devicePixelRatio || 1
+            const w = Math.round(window.innerWidth * dpr)
+            const h = Math.round(window.innerHeight * dpr)
+            if (this.provider.canvas.width !== w)  this.provider.canvas.width  = w
+            if (this.provider.canvas.height !== h) this.provider.canvas.height = h
         },
 
         startLink(vertex, length) {
@@ -199,13 +186,12 @@ export default {
     },
 }
 </script>
-  
+
 <style scoped>
 .anim-wrap {
-    background-color: #31102F;
+    background: radial-gradient(ellipse at center, #0d2535 0%, #040e16 100%);
     width: 100%;
     max-width: 100%;
-    background: radial-gradient(ellipse at center, rgba(49, 16, 47, 1) 0%, rgba(40, 11, 41, 1) 100%);
 }
 
 #anim {
@@ -217,4 +203,3 @@ export default {
     z-index: 1;
 }
 </style>
-  

@@ -1,24 +1,17 @@
 <template>
-    <v-sheet class="mb-5" color="transparent">
-        <v-row class="mx-0">
-            <v-sheet class="mr-3" color="primary" width="1" height="100" tile />
-
-            <v-col>
-                <div class="mb-3" v-text="value.institution" />
-
-                <div class="text-right">
-                    <span class="title primary--text" v-text="`${value.studyType} ${value.area}`" />
-
-                    <footer>
-                        <div v-for="(course, i) in value.courses" :key="i" v-text="course" />
-                        <div v-text="years" />
-                    </footer>
-                </div>
-            </v-col>
-        </v-row>
-    </v-sheet>
+    <div class="edu-card mb-6">
+        <div class="edu-bar" />
+        <div class="edu-body">
+            <div class="edu-institution">{{ value.institution }}</div>
+            <div class="edu-degree">{{ value.studyType }} {{ value.area }}</div>
+            <div class="edu-meta">{{ value.startDate }} – {{ value.endDate }}</div>
+            <div v-for="(course, i) in value.courses" :key="i" class="edu-course">
+                {{ course }}
+            </div>
+        </div>
+    </div>
 </template>
-  
+
 <script>
 export default {
     props: {
@@ -34,15 +27,50 @@ export default {
             }),
         },
     },
-
-    computed: {
-        years() {
-            return `
-            ${this.value.startDate}-
-            ${this.value.endDate}
-          `.trim();
-        },
-    },
 };
 </script>
-  
+
+<style scoped>
+.edu-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.edu-bar {
+    width: 3px;
+    min-height: 72px;
+    background: #15738f;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.edu-institution {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(0, 0, 0, 0.4);
+    margin-bottom: 4px;
+}
+
+.edu-degree {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.82);
+    margin-bottom: 3px;
+}
+
+.edu-meta {
+    font-size: 0.8rem;
+    color: #15738f;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.edu-course {
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.5);
+    font-style: italic;
+}
+</style>

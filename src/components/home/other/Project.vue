@@ -1,101 +1,149 @@
 <template>
-    <v-sheet class="py-md-5" height="100%" color="transparent">
-        <div class="text-center mb-5">
-            <CoreSubheading class="mb-1" v-text="value.name" />
-            <span class="subheading" v-text="value.category" />
+    <div class="project-card">
+
+        <!-- Gradient banner -->
+        <div class="card-banner" :style="{ background: value.gradient }">
+            <div class="banner-top">
+                <v-chip size="small" variant="flat" color="white" class="banner-chip">
+                    {{ value.category }}
+                </v-chip>
+                <span class="banner-dates">{{ value.startDate }} – {{ value.endDate }}</span>
+            </div>
         </div>
-        <v-row>
-            <v-col cols="auto">
-                <div class="mb-3 div-container">
-                    <CoreSubheading class="mb-3">
-                        Project Details
-                    </CoreSubheading>
-                    <CoreText>
-                        {{ value.details }}
-                    </CoreText>
 
-                    <CoreSubheading>
-                        Project Info
-                    </CoreSubheading>
-                    <v-list class="transparent">
-                        <v-list-item>
-                            <v-list-item-action>
-                                <v-icon color="primary">
-                                    mdi-account
-                                </v-icon>
-                            </v-list-item-action>
-                            <v-list-item-title class="mr-2">
-                                Client Name
-                            </v-list-item-title>
-                            <v-list-item-title class="caption grey--text text--lighten-1 hidden-sm-and-down">
-                                {{ value.client }}
-                            </v-list-item-title>
-                        </v-list-item>
-                        <v-list-item>
-                            <v-list-item-action>
-                                <v-icon color="primary">
-                                    mdi-calendar
-                                </v-icon>
-                            </v-list-item-action>
-                            <v-list-item-title class="mr-2">
-                                Project Dates
-                            </v-list-item-title>
-                            <v-list-item-title class="caption grey--text text--lighten-1 hidden-sm-and-down">
-                                {{ value.startDate }}, {{ value.endDate }}
-                            </v-list-item-title>
-                        </v-list-item>
-                        <v-list-item>
-                            <v-list-item-action>
-                                <v-icon color="primary">
-                                    mdi-tag
-                                </v-icon>
-                            </v-list-item-action>
-                            <v-list-item-title class="mr-2">
-                                Project Category
-                            </v-list-item-title>
-                            <v-list-item-title class="caption grey--text text--lighten-1 hidden-sm-and-down">
-                                {{ value.category }}
-                            </v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </div>
-            </v-col>
-            <v-col v-if="value.src" class="hidden-sm-and-down">
-                <v-img :src="require(`@/assets/projects/${value.src}`)" height="350" width="500" contain class="mx-auto" />
-            </v-col>
-        </v-row>
-    </v-sheet>
+        <div class="card-body">
+            <h3 class="card-title">{{ value.name }}</h3>
+            <p class="card-details">{{ value.details }}</p>
+
+            <!-- Tech tags -->
+            <div v-if="value.tech && value.tech.length" class="tech-row">
+                <v-chip
+                    v-for="t in value.tech"
+                    :key="t"
+                    size="x-small"
+                    variant="tonal"
+                    color="primary"
+                    class="tech-chip"
+                >
+                    {{ t }}
+                </v-chip>
+            </div>
+
+            <div class="card-footer">
+                <v-icon icon="mdi-office-building-outline" size="14" color="primary" class="mr-2" />
+                <span class="card-client">{{ value.client }}</span>
+            </div>
+        </div>
+    </div>
 </template>
-  
-<script>
-import CoreSubheading from "@/components/home/core/Subheading.vue"
-import CoreText from "@/components/home/core/Text.vue"
 
+<script>
 export default {
     props: {
         value: {
             type: Object,
             default: () => ({
-                name: '',
-                category: '',
-                src: undefined,
-                details: '',
-                client: '',
-                startDate: '',
-                endDate: ''
+                name: '', category: '', details: '', client: '',
+                startDate: '', endDate: '', tech: [],
+                gradient: 'linear-gradient(135deg, #15738f, #1a9bbe)',
             }),
         },
-    },
-    components: {
-        CoreSubheading: CoreSubheading,
-        CoreText: CoreText,
     },
 }
 </script>
 
 <style scoped>
-.div-container {
-    max-width: 500px;
+.project-card {
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(21, 115, 143, 0.12);
+    box-shadow: 0 2px 12px rgba(21, 115, 143, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: default;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(21, 115, 143, 0.16);
+}
+
+/* ── Banner ───────────────────────────────────────────── */
+.card-banner {
+    padding: 20px 24px 18px;
+}
+
+.banner-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.banner-chip {
+    font-weight: 600;
+    font-size: 0.72rem !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    background: rgba(255, 255, 255, 0.22) !important;
+}
+
+.banner-dates {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.72);
+    letter-spacing: 0.04em;
+}
+
+/* ── Body ─────────────────────────────────────────────── */
+.card-body {
+    padding: 22px 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+
+.card-title {
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.84);
+    line-height: 1.35;
+    margin: 0;
+}
+
+.card-details {
+    font-size: 0.88rem;
+    line-height: 1.78;
+    color: rgba(0, 0, 0, 0.56);
+    flex: 1;
+    margin: 0;
+}
+
+/* ── Tech tags ────────────────────────────────────────── */
+.tech-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.tech-chip {
+    font-size: 0.7rem !important;
+}
+
+/* ── Footer ───────────────────────────────────────────── */
+.card-footer {
+    display: flex;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid rgba(21, 115, 143, 0.1);
+    margin-top: auto;
+}
+
+.card-client {
+    font-size: 0.76rem;
+    color: rgba(0, 0, 0, 0.4);
 }
 </style>
-  

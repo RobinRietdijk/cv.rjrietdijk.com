@@ -1,32 +1,62 @@
 <template>
-    <div class="mb-4">
-        <h4 class="text-uppercase mb-3 primary--text" v-text="value.name" />
-
-        <div class="pl-md-4">
-            <v-row v-for="(skill, i) in value.keywords" :key="i" align="center" class="mb-2 mx-0">
-                <v-col cols="4">
-                    <h5 class="subheading" v-text="skill.name" />
-                </v-col>
-                <v-col cols="8">
-                    <v-rating length="5" dense empty-icon="mdi-record" full-icon="mdi-record" :value="skill.level"
-                        background-color="grey darken-4" readonly />
-                </v-col>
-            </v-row>
+    <div class="skill-group">
+        <div class="skill-group-label">{{ value.name }}</div>
+        <div class="chip-wrap">
+            <v-chip
+                v-for="skill in value.keywords"
+                :key="skill.name"
+                :color="chipColor"
+                :variant="chipVariant"
+                size="small"
+                class="skill-chip"
+            >
+                {{ skill.name }}
+            </v-chip>
         </div>
     </div>
 </template>
-  
+
 <script>
 export default {
     props: {
         value: {
             type: Object,
-            default: () => ({
-                category: "",
-                skills: [],
-            }),
+            default: () => ({ name: "", keywords: [] }),
+        },
+    },
+    computed: {
+        chipVariant() {
+            return this.value.name.toLowerCase().includes('familiar') ? 'outlined' : 'tonal'
+        },
+        chipColor() {
+            return this.value.name.toLowerCase().includes('tool') ? 'secondary' : 'primary'
         },
     },
 };
 </script>
-  
+
+<style scoped>
+.skill-group {
+    margin-bottom: 24px;
+}
+
+.skill-group-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.13em;
+    color: #15738f;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.chip-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.skill-chip {
+    font-size: 0.78rem !important;
+    font-weight: 500;
+}
+</style>

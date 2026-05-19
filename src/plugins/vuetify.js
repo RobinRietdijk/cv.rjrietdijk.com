@@ -17,12 +17,12 @@ export default createVuetify({
   theme: {
     themes: {
       light: {
-        dark: true,
+        dark: false,
         colors: {
-          primary: '#B76935',
-          accent: '143642',
-          secondary: 'A56336',
-          info: colors.teal.lighten1,
+          primary: '#15738f',
+          secondary: '#1a9bbe',
+          accent: '#7ec8e3',
+          info: '#26b5d8',
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3
