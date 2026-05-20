@@ -7,7 +7,7 @@
                 <v-chip size="small" variant="flat" color="white" class="banner-chip">
                     {{ value.category }}
                 </v-chip>
-                <span class="banner-dates">{{ value.startDate }} – {{ value.endDate }}</span>
+                <span class="banner-dates">{{ value.startDate }} - {{ value.endDate }}</span>
             </div>
         </div>
 
@@ -32,6 +32,16 @@
             <div class="card-footer">
                 <v-icon icon="mdi-office-building-outline" size="14" color="primary" class="mr-2" />
                 <span class="card-client">{{ value.client }}</span>
+                <a
+                    v-if="value.link"
+                    :href="value.link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="card-link ml-auto"
+                >
+                    <v-icon icon="mdi-open-in-new" size="14" class="mr-1" />
+                    View
+                </a>
             </div>
         </div>
     </div>
@@ -145,5 +155,19 @@ export default {
 .card-client {
     font-size: 0.76rem;
     color: rgba(0, 0, 0, 0.4);
+}
+
+.card-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #15738f;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.card-link:hover {
+    opacity: 0.75;
 }
 </style>

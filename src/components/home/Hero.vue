@@ -127,7 +127,7 @@ export default {
 .scroll-btn {
     position: absolute;
     bottom: 15vh;
-    z-index: 2;
+    z-index: 20;
     background: transparent;
     border: 1.5px solid rgba(255, 255, 255, 0.55);
     border-radius: 50%;

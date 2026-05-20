@@ -2,29 +2,27 @@
   <div>
     <Hero />
 
-    <div class="sect sect-about sect-first">
-      <div class="deco ring-tr" />
-      <v-container style="position: relative; z-index: 1;">
+    <div class="hero-fade" />
+
+    <div class="sect sect-about">
+      <v-container>
         <About />
       </v-container>
     </div>
 
     <div class="sect sect-portfolio">
-      <div class="deco dots-bl" />
       <v-container style="position: relative; z-index: 1;">
         <Portfolio />
       </v-container>
     </div>
 
     <div class="sect sect-timeline">
-      <div class="deco ring-bl" />
-      <v-container style="position: relative; z-index: 1;">
+      <v-container>
         <Timeline />
       </v-container>
     </div>
 
     <div class="sect sect-skills">
-      <div class="deco dots-tr" />
       <v-container style="position: relative; z-index: 1;">
         <Skills />
       </v-container>
@@ -49,6 +47,15 @@ const year = new Date().getFullYear()
 </script>
 
 <style scoped>
+.hero-fade {
+  height: 160px;
+  margin-top: -160px;
+  background: linear-gradient(to bottom, transparent, #ffffff);
+  position: relative;
+  z-index: 10;
+  pointer-events: none;
+}
+
 .sect {
   padding: 96px 0;
   position: relative;
@@ -56,18 +63,7 @@ const year = new Date().getFullYear()
 }
 
 .sect-about {
-  background: rgba(255, 255, 255, 0.86);
-  position: relative;
-}
-
-.sect-about::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 80px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent);
-  pointer-events: none;
-  z-index: 2;
+  background: #ffffff;
 }
 
 .sect-portfolio {
@@ -99,12 +95,6 @@ const year = new Date().getFullYear()
   background-image: radial-gradient(circle, rgba(21, 115, 143, 0.14) 1.5px, transparent 1.5px);
   background-size: 28px 28px;
   transform: skewY(2.5deg);
-  z-index: 0;
-}
-
-.deco {
-  position: absolute;
-  pointer-events: none;
   z-index: 0;
 }
 
