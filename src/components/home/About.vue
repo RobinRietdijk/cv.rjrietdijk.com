@@ -49,6 +49,7 @@ export default {
             {label: 'Email', value: 'robin@rjrietdijk.com', icon: 'mdi-email-outline', href: 'mailto:robin@rjrietdijk.com'},
             {label: 'Phone', value: '+31 (0) 6 1429 6237', icon: 'mdi-phone-outline'},
             {label: 'GitHub', value: 'RobinRietdijk', icon: 'mdi-github', href: 'https://github.com/RobinRietdijk'},
+            {label: 'LinkedIn', value: 'rjrietdijk', icon: 'mdi-linkedin', href: 'https://www.linkedin.com/in/rjrietdijk/'}
         ],
     }),
 }
